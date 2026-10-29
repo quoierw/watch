@@ -2,14 +2,16 @@
 #include "lcd_init.h"
 #include "lcd.h"
 #include "lcdfont.h"
+#include "spi.h"
 
-
-
+static lcd_callback_t lcd_ready_cb = NULL;
 
 void lcd_fill(uint16_t x, uint16_t y, uint16_t x_e, uint16_t y_e, uint16_t color)
 {
     uint16_t i, j;
-    lcd_setAddrss(x, y + LCD_Y_SCREEN_OFFSET, x_e - 1, y_e + LCD_Y_SCREEN_OFFSET - 1);
+    /* This API uses an exclusive end coordinate (see the < loops below). */
+    lcd_setAddrss(x, y + LCD_Y_SCREEN_OFFSET,
+                  x_e - 1, y_e + LCD_Y_SCREEN_OFFSET - 1);
     for(i = y; i < y_e; i++)
     {
         for(j = x; j < x_e; j ++)
@@ -21,14 +23,35 @@ void lcd_fill(uint16_t x, uint16_t y, uint16_t x_e, uint16_t y_e, uint16_t color
 
 void lcd_color_fill(uint16_t x, uint16_t y, uint16_t x_e, uint16_t y_e, uint16_t* color)
 {
-    uint16_t width = x_e - x - 1;
-    uint16_t height = y_e - y - 1;
+    uint16_t width = x_e - x + 1;
+    uint16_t height = y_e - y + 1;
     uint32_t numOfpixel = width * height;
     uint32_t byteOfWrite = numOfpixel * 2u;
 
-    lcd_setAddrss(x, y + LCD_Y_SCREEN_OFFSET, x_e - 1, y_e + LCD_Y_SCREEN_OFFSET - 1);
+    /* LVGL areas use inclusive x2/y2 coordinates. */
+    lcd_setAddrss(x, y + LCD_Y_SCREEN_OFFSET,
+                  x_e, y_e + LCD_Y_SCREEN_OFFSET);
     //hal_spi_dma;
+    HAL_SPI_Transmit_DMA(&hspi1, (uint8_t *)color,byteOfWrite);
+}
 
+void lcd_set_flush_complete_callback(lcd_callback_t cb)
+{
+    lcd_ready_cb = cb;
+}
+
+void HAL_SPI_TxCpltCallback(SPI_HandleTypeDef *hspi)
+{
+    if(hspi->Instance == SPI1)
+    {
+        while(hspi->Instance->SR & SPI_FLAG_BSY);
+        {
+            if(lcd_ready_cb)
+            {
+                lcd_ready_cb();
+            }
+        }
+    }
 }
 
 void lcd_draw_point(uint16_t x, uint16_t y,uint16_t color)

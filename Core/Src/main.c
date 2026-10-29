@@ -18,6 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "dma.h"
 #include "spi.h"
 #include "tim.h"
 #include "gpio.h"
@@ -29,6 +30,9 @@
 #include "../../BSP/TOUCH/CST816.h"
 #include "../../BSP/IIC/iic_hal.h"
 #include "../../SYSTEM/delay.h"
+#include "../../LVGL/lvgl/lvgl.h"
+#include "../../LVGL/lvgl/src/porting/lv_port_disp.h"
+#include "../../LVGL/lvgl/src/porting/lv_port_indev.h"
 #include "string.h"
 #include "stdio.h"
 /* USER CODE END Includes */
@@ -94,6 +98,7 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
   MX_TIM3_Init();
   MX_SPI1_Init();
   /* USER CODE BEGIN 2 */
@@ -104,22 +109,30 @@ int main(void)
   #endif
 	lcd_init();
 	lcd_clearScreen(WHITE);
-	lcd_fill(0, 0, LCD_WIDTH /2 , LCD_HEIGHT / 2, BLACK);
-	lcd_fill(LCD_WIDTH /2, 0, LCD_WIDTH, LCD_HEIGHT / 2, RED);
+//	lcd_fill(0, 0, LCD_WIDTH /2 , LCD_HEIGHT / 2, BLACK);
+//	lcd_fill(LCD_WIDTH /2, 0, LCD_WIDTH, LCD_HEIGHT / 2, RED);
 
     CST816_GPIO_Init();
     CST816_RESET();
-    uint8_t str[30];
-    lcd_show_string(30, 30, str, WHITE, BLACK, 12, 0);
-
-    /* USER CODE END 2 */
+	lv_init();
+	lv_port_disp_init();
+    lv_port_indev_init();
+    lv_obj_t * scr = lv_scr_act();
+    lv_obj_t * btn = lv_btn_create(scr);
+    lv_obj_set_size(btn, 50, 50);
+    lv_obj_set_align(btn, LV_ALIGN_CENTER);
+    lv_obj_t* label1 = lv_label_create(btn);
+    lv_label_set_text(label1, "ok");
+	lv_obj_set_align(label1, LV_ALIGN_CENTER);
+  /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
     /* USER CODE END WHILE */
-    CST816_Get_XY_AXIS();
+    lv_timer_handler();
+    HAL_Delay(5);
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
