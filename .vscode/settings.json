@@ -1,0 +1,23 @@
+{
+    "files.watcherExclude": {
+        "**/MDK-ARM/output/**": true,
+        "**/MDK-ARM/*.lst": true,
+        "**/MDK-ARM/*.uvguix.*": true,
+        "**/MDK-ARM/*.uvoptx": true
+    },
+    "files.exclude": {
+        "**/MDK-ARM/output": true
+    },
+    "search.exclude": {
+        "**/MDK-ARM/output/**": true
+    },
+    "C_Cpp.files.exclude": {
+        "**/.vscode": true,
+        "**/.vs": true,
+        "**/MDK-ARM/output/**": true
+    },
+    "C_Cpp.codeAnalysis.exclude": {
+        "**/MDK-ARM/output/**": true
+    },
+    "C_Cpp.workspaceParsingPriority": "low"
+}

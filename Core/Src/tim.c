@@ -21,7 +21,47 @@
 #include "tim.h"
 
 /* USER CODE BEGIN 0 */
+void TIM1_CH3N_PWM_Init(void)
+{
+    GPIO_InitTypeDef GPIO_InitStruct = {0};
 
+    __HAL_RCC_GPIOB_CLK_ENABLE();
+
+    GPIO_InitStruct.Pin = GPIO_PIN_15;
+    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+    GPIO_InitStruct.Alternate = GPIO_AF1_TIM1;
+
+    HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+    /*
+     * 不重新初始化 TIM1。
+     * 保留现有的 PSC、ARR、CNT 和 HAL Timebase 配置。
+     */
+
+    /* CC3S = 00：通道3配置为输出比较 */
+    TIM1->CCMR2 &= ~TIM_CCMR2_CC3S;
+
+    /* OC3M = 110：PWM模式1 */
+    TIM1->CCMR2 &= ~TIM_CCMR2_OC3M;
+    TIM1->CCMR2 |= TIM_CCMR2_OC3M_1
+                 | TIM_CCMR2_OC3M_2;
+
+    /* CCR3采用预装载 */
+    TIM1->CCMR2 |= TIM_CCMR2_OC3PE;
+
+    /* 设置占空比比较值，约为50% */
+    TIM1->CCR3 = (TIM1->ARR + 1U) / 1000U;
+
+    /* 使能CH3N互补输出，设置其输出极性 */
+    TIM1->CCER &= ~TIM_CCER_CC3NP;
+    TIM1->CCER |= TIM_CCER_CC3NE;
+
+    /* 高级定时器主输出使能 */
+    TIM1->BDTR |= TIM_BDTR_MOE;	
+	
+	
+}
 /* USER CODE END 0 */
 
 TIM_HandleTypeDef htim3;

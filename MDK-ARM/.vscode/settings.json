@@ -1,0 +1,23 @@
+{
+    "files.watcherExclude": {
+        "**/output/**": true,
+        "**/*.lst": true,
+        "**/*.uvguix.*": true,
+        "**/*.uvoptx": true
+    },
+    "files.exclude": {
+        "**/output": true
+    },
+    "search.exclude": {
+        "**/output/**": true
+    },
+    "C_Cpp.files.exclude": {
+        "**/.vscode": true,
+        "**/.vs": true,
+        "**/output/**": true
+    },
+    "C_Cpp.codeAnalysis.exclude": {
+        "**/output/**": true
+    },
+    "C_Cpp.workspaceParsingPriority": "low"
+}

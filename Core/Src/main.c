@@ -18,6 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "cmsis_os.h"
 #include "dma.h"
 #include "spi.h"
 #include "tim.h"
@@ -33,6 +34,7 @@
 #include "../../LVGL/lvgl/lvgl.h"
 #include "../../LVGL/lvgl/src/porting/lv_port_disp.h"
 #include "../../LVGL/lvgl/src/porting/lv_port_indev.h"
+#include "../../User/Tasks/inc/user_TaskInit.h"
 #include "string.h"
 #include "stdio.h"
 /* USER CODE END Includes */
@@ -60,13 +62,13 @@
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
+void MX_FREERTOS_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
 /* USER CODE END 0 */
 
 /**
@@ -102,6 +104,7 @@ int main(void)
   MX_TIM3_Init();
   MX_SPI1_Init();
   /* USER CODE BEGIN 2 */
+	TIM1_CH3N_PWM_Init();
   delay_init();
   #if !SOFTWARE_SPI
     lcd_openLight();
@@ -109,30 +112,27 @@ int main(void)
   #endif
 	lcd_init();
 	lcd_clearScreen(WHITE);
-//	lcd_fill(0, 0, LCD_WIDTH /2 , LCD_HEIGHT / 2, BLACK);
-//	lcd_fill(LCD_WIDTH /2, 0, LCD_WIDTH, LCD_HEIGHT / 2, RED);
-
+	
     CST816_GPIO_Init();
     CST816_RESET();
-	lv_init();
-	lv_port_disp_init();
-    lv_port_indev_init();
-    lv_obj_t * scr = lv_scr_act();
-    lv_obj_t * btn = lv_btn_create(scr);
-    lv_obj_set_size(btn, 50, 50);
-    lv_obj_set_align(btn, LV_ALIGN_CENTER);
-    lv_obj_t* label1 = lv_label_create(btn);
-    lv_label_set_text(label1, "ok");
-	lv_obj_set_align(label1, LV_ALIGN_CENTER);
+	
   /* USER CODE END 2 */
+
+  /* Init scheduler */
+  osKernelInitialize();  /* Call init function for freertos objects (in cmsis_os2.c) */
+  MX_FREERTOS_Init();
+
+  /* Start scheduler */
+  osKernelStart();
+
+  /* We should never get here as control is now taken by the scheduler */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
     /* USER CODE END WHILE */
-    lv_timer_handler();
-    HAL_Delay(5);
+
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */

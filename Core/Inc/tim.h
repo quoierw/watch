@@ -36,7 +36,7 @@ extern "C" {
 extern TIM_HandleTypeDef htim3;
 
 /* USER CODE BEGIN Private defines */
-
+void TIM1_CH3N_PWM_Init(void);
 /* USER CODE END Private defines */
 
 void MX_TIM3_Init(void);

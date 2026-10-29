@@ -110,11 +110,11 @@ static bool touchpad_is_pressed(void)
 		{
 			return true;
 		}
-		else
-		{
-			return false;
-		}
 	}
+    else
+    {
+        return false;
+    }
 }
 
 /*Get the x and y coordinates if the touchpad is pressed*/
