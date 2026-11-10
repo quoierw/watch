@@ -31,6 +31,8 @@
 #include "../../BSP/TOUCH/CST816.h"
 #include "../../BSP/IIC/iic_hal.h"
 #include "../../BSP/AHT21/AHT21.h"
+#include "../../BSP/KEY/key.h"
+
 #include "../../SYSTEM/delay.h"
 #include "../../LVGL/lvgl/lvgl.h"
 #include "../../LVGL/lvgl/src/porting/lv_port_disp.h"
@@ -106,6 +108,7 @@ int main(void)
   MX_SPI1_Init();
   /* USER CODE BEGIN 2 */
 	TIM1_CH3N_PWM_Init();
+    key_init();
   delay_init();
   #if !SOFTWARE_SPI
     lcd_openLight();

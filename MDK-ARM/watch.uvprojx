@@ -1724,6 +1724,11 @@
               <FileType>1</FileType>
               <FilePath>..\BSP\AHT21\AHT21.c</FilePath>
             </File>
+            <File>
+              <FileName>key.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\BSP\KEY\key.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

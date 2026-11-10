@@ -20,7 +20,7 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include "main.h"
-#include "cmsis_os.h"
+#include "cmsis_os.h" 
 #include "../../User/Tasks/inc/user_TaskInit.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -147,19 +147,24 @@ void StartDefaultTask(void *argument)
 {
   /* USER CODE BEGIN StartDefaultTask */
 	static uint8_t flag = 0;
+    static uint8_t extern_flag = 1;
   /* Infinite loop */
   for(;;)
   {
-	 if(0 == flag)
-	 {
-		__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_3, 0);
-		 flag = 1;
-	 }
-	 else
-	 {
-		__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_3, 1);
-		 flag = 0;
-	 }
+	osMessageQueueGet(externFlagQID, &extern_flag, 0, 0); 
+    if(1 == extern_flag)
+    {
+        if(0 == flag)
+        {
+        __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_3, 0);
+            flag = 1;
+        }
+        else
+        {
+        __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_3, 1);
+            flag = 0;
+        }
+    }
     osDelay(1000);
   }
   /* USER CODE END StartDefaultTask */
