@@ -30,6 +30,7 @@
 #include "../../BSP/LCD/lcd.h"
 #include "../../BSP/TOUCH/CST816.h"
 #include "../../BSP/IIC/iic_hal.h"
+#include "../../BSP/AHT21/AHT21.h"
 #include "../../SYSTEM/delay.h"
 #include "../../LVGL/lvgl/lvgl.h"
 #include "../../LVGL/lvgl/src/porting/lv_port_disp.h"
@@ -111,11 +112,11 @@ int main(void)
     lcd_setLight(100);
   #endif
 	lcd_init();
-	lcd_clearScreen(WHITE);
+	lcd_clearScreen(BLACK);
 	
     CST816_GPIO_Init();
     CST816_RESET();
-	
+	AHT21_Init();
   /* USER CODE END 2 */
 
   /* Init scheduler */

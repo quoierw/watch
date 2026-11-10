@@ -1,5 +1,6 @@
 #include "AHT21.h"
 #include "../../SYSTEM/delay.h"
+#include "cmsis_os2.h"                  // ::CMSIS:RTOS2
 
 iic_bus_t AHT21_bus = {
     .IIC_SCL_Pin = GPIO_PIN_14,
@@ -69,8 +70,11 @@ uint8_t AHT21_Read(float *humi, float *temp)
     uint8_t recArry[6] = {0};
     uint32_t data = 0;
     IIC_WriteMultiOneByte(&AHT21_bus, AHT21_Device_Addr, 0xAC, 2, tempDATA);
-
-    delay_ms(80);
+	#if 1
+        delay_ms(80);
+    #else
+	    osDelay(80);
+    #endif
 
     AHT21_ReadMultiByte(&AHT21_bus, AHT21_Device_Addr, 6, recArry);
     data |= (uint32_t)recArry[1] << 12;
