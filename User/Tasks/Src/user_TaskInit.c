@@ -25,20 +25,29 @@ void UserTaskInit(void)
 
 void LvHandlerTask(void *argument)
 {
+    uint8_t i = 0;
 	lv_init();
 	lv_port_disp_init();
     lv_port_indev_init();
+
     lv_obj_t * scr = lv_scr_act();
     lv_obj_t * btn = lv_btn_create(scr);
     lv_obj_set_size(btn, 50, 50);
     lv_obj_set_align(btn, LV_ALIGN_CENTER);
+
     lv_obj_t* label1 = lv_label_create(btn);
     lv_label_set_text(label1, "ok");
+
 	lv_obj_set_align(label1, LV_ALIGN_CENTER);
-	
     lv_obj_t * slider = lv_slider_create(scr);
     lv_obj_set_size(slider, 100, 5);
     lv_obj_set_pos(slider, 50, 50);
+
+    lv_obj_t* label2 = lv_label_create(scr);
+    lv_obj_set_size(label2, 100, 50);
+    lv_obj_set_pos(label2, 0, 170);    
+	lv_label_set_text_fmt(label2, "Value: %d", i);
+
 
     while(1)
     {
@@ -54,4 +63,6 @@ void LvHandlerTask(void *argument)
 void TaskTickHook(void)
 {
     lv_tick_inc(1);
+
+
 }

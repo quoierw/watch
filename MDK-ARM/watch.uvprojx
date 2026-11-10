@@ -1719,6 +1719,11 @@
               <FileType>1</FileType>
               <FilePath>..\BSP\IIC\iic_hal.c</FilePath>
             </File>
+            <File>
+              <FileName>AHT21.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\BSP\AHT21\AHT21.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

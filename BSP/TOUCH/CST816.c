@@ -42,19 +42,19 @@ void CST816_Init(void)
 uint8_t CST816_SetAutoSleepTime(uint8_t time)
 {
     uint8_t tempVal;
-    tempVal = IIC_WriteOneByte(&CST816_bus, Device_Addr, AutoSleepTime, time);
+    tempVal = IIC_WriteOneByte(&CST816_bus, CST816_Device_Addr, AutoSleepTime, time);
     return tempVal;
 }
 
 uint8_t CST816_IIC_ReadReg(uint8_t addr, uint8_t *recVal)
 {
-    return IIC_ReadOneByte(&CST816_bus, Device_Addr, addr, recVal);
+    return IIC_ReadOneByte(&CST816_bus, CST816_Device_Addr, addr, recVal);
 }
 
 uint8_t CST816_IIC_WriteReg(uint8_t addr ,uint8_t data)
 {
     uint8_t tempVal;
-    tempVal = IIC_WriteOneByte(&CST816_bus, Device_Addr, addr, data);
+    tempVal = IIC_WriteOneByte(&CST816_bus, CST816_Device_Addr, addr, data);
     return tempVal;
 }
 
@@ -62,7 +62,7 @@ uint8_t CST816_Get_XY_AXIS(void)
 {
     uint8_t recVal;
     uint8_t Data[4];
-    recVal = IIC_ReadMultiByte(&CST816_bus, Device_Addr, XposH, 4, Data);
+    recVal = IIC_ReadMultiByte(&CST816_bus, CST816_Device_Addr, XposH, 4, Data);
     CST816_Instance.x = (uint16_t)(((Data[0] & 0x0F) << 8) | Data[1]);
     CST816_Instance.y = (uint16_t)(((Data[2] & 0x0F) << 8) | Data[3]);
     return recVal;

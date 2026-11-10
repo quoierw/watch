@@ -13,7 +13,7 @@
 #define TOUCH_RST(x)    HAL_GPIO_WritePin(TOUCH_RST_PORT, TOUCH_RST_PIN, ((x) ? GPIO_PIN_SET: GPIO_PIN_RESET))
 
 /* 设备地址 */
-#define Device_Addr                   0x15
+#define CST816_Device_Addr                   0x15
 
 /* 触摸屏寄存器 */
 #define GestureID                     0x01
