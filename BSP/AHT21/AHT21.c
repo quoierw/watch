@@ -59,7 +59,7 @@ void AHT21_Init(void)
 
     if((recVal & 0x08) != 0x08)
     {
-      IIC_WriteMultiOneByte(&AHT21_bus, AHT21_Device_Addr, 0XBE, 2, tempDATA);
+      IIC_WriteMultiByte(&AHT21_bus, AHT21_Device_Addr, 0XBE, 2, tempDATA);
       delay_ms(10);
     }
 }
@@ -69,8 +69,8 @@ uint8_t AHT21_Read(float *humi, float *temp)
     uint8_t tempDATA[] = {0x33, 0x00};
     uint8_t recArry[6] = {0};
     uint32_t data = 0;
-    IIC_WriteMultiOneByte(&AHT21_bus, AHT21_Device_Addr, 0xAC, 2, tempDATA);
-	#if 1
+    IIC_WriteMultiByte(&AHT21_bus, AHT21_Device_Addr, 0xAC, 2, tempDATA);
+	#if 0
         delay_ms(80);
     #else
 	    osDelay(80);

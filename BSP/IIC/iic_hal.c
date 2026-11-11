@@ -133,7 +133,7 @@ uint8_t IIC_WriteOneByte(iic_bus_t *bus, uint8_t addr, uint8_t reg, uint8_t data
 
 }
 
-uint8_t IIC_WriteMultiOneByte(iic_bus_t *bus, uint8_t addr, uint8_t reg, uint8_t length, uint8_t data[])
+uint8_t IIC_WriteMultiByte(iic_bus_t *bus, uint8_t addr, uint8_t reg, uint16_t length, uint8_t data[])
 {
     uint8_t i = 0;
     IIC_Start(bus);
@@ -184,9 +184,9 @@ uint8_t IIC_ReadOneByte(iic_bus_t *bus, uint8_t addr, uint8_t reg, uint8_t *recV
     return 0;
 }
 
-uint8_t IIC_ReadMultiByte(iic_bus_t *bus, uint8_t addr, uint8_t reg, uint8_t length, uint8_t *recBuff)
+uint8_t IIC_ReadMultiByte(iic_bus_t *bus, uint8_t addr, uint8_t reg, uint16_t length, uint8_t *recBuff)
 {
-    uint8_t i = 0;
+    uint16_t i = 0;
     IIC_Start(bus);
     IIC_SendByte(bus, addr << 1);
 

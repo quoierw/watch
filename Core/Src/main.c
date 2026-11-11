@@ -22,6 +22,7 @@
 #include "dma.h"
 #include "spi.h"
 #include "tim.h"
+#include "usart.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -32,6 +33,8 @@
 #include "../../BSP/IIC/iic_hal.h"
 #include "../../BSP/AHT21/AHT21.h"
 #include "../../BSP/KEY/key.h"
+#include "../../BSP/BL24C02/DataSave.h"
+#include "../../BSP/KT6328/KT6328.h"
 
 #include "../../SYSTEM/delay.h"
 #include "../../LVGL/lvgl/lvgl.h"
@@ -60,7 +63,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
+extern TIM_HandleTypeDef        htim1;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -106,8 +109,11 @@ int main(void)
   MX_DMA_Init();
   MX_TIM3_Init();
   MX_SPI1_Init();
+  MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
 	TIM1_CH3N_PWM_Init();
+	__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_3, 0);
+
     key_init();
   delay_init();
   #if !SOFTWARE_SPI
@@ -116,6 +122,7 @@ int main(void)
   #endif
 	lcd_init();
 	lcd_clearScreen(BLACK);
+
 	
     CST816_GPIO_Init();
     CST816_RESET();

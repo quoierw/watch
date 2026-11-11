@@ -33,17 +33,14 @@ osThreadId_t keyHTaskHandle;
 const osThreadAttr_t keyTask_attributes = {
   .name = "keyHandle",
   .stack_size = 128 * 1,
-  .priority = (osPriority_t) osPriorityLow1,
+  .priority = (osPriority_t) osPriorityNormal,
 };
 
-
 osMessageQueueId_t aht211QID;
-osMessageQueueId_t externFlagQID;
 
 void UserTaskInit(void)
 {
     aht211QID = osMessageQueueNew(1, 2 *sizeof(float), NULL);
-    externFlagQID = osMessageQueueNew(1, 1, NULL);
     LvHandlerTaskHandle = osThreadNew(LvHandlerTask, NULL, &LvHandlerTask_attributes);
     AHT21HTaskHandle = osThreadNew(AHT21HandlerTask, NULL, &AHT21Task_attributes);
     keyHTaskHandle = osThreadNew(keyTask, NULL, &keyTask_attributes);
@@ -104,35 +101,13 @@ void AHT21HandlerTask(void *argument)
 
 void keyTask(void *argument)
 {
-	static uint8_t light = 50;
-    uint8_t flag;
     while(1)
     {
         switch (key_scan(0))
         {
         case 1:
-            flag = 1;
-
-			light += 10;
-			if(light >= 100)
-			{	
-				light = 100;
-			}
-		    lcd_setLight(light);
-
-            osMessageQueuePut(externFlagQID, &flag, 0, 0);
-			
             break;
         case 2:
-            flag = 0;
-
-			light -= 10;
-			if(light <= 10)
-			{	
-				light = 10;
-			}
-		    lcd_setLight(light);
-            osMessageQueuePut(externFlagQID, &flag, 0, 0);
             break;
         default:
             break;

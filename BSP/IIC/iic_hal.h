@@ -35,11 +35,11 @@ uint8_t IIC_RecAck(iic_bus_t *bus);
 
 uint8_t IIC_WriteOneByte(iic_bus_t *bus, uint8_t addr, uint8_t reg, uint8_t data);
 
-uint8_t IIC_WriteMultiOneByte(iic_bus_t *bus, uint8_t addr, uint8_t reg, uint8_t length, uint8_t data[]);
+uint8_t IIC_WriteMultiByte(iic_bus_t *bus, uint8_t addr, uint8_t reg, uint16_t length, uint8_t data[]);
 
 uint8_t IIC_ReadOneByte(iic_bus_t *bus, uint8_t addr, uint8_t reg, uint8_t *recVal);
 
-uint8_t IIC_ReadMultiByte(iic_bus_t *bus, uint8_t addr, uint8_t reg, uint8_t length, uint8_t *recBuff);
+uint8_t IIC_ReadMultiByte(iic_bus_t *bus, uint8_t addr, uint8_t reg, uint16_t length, uint8_t *recBuff);
 
 
 #endif

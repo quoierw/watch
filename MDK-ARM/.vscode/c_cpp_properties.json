@@ -21,6 +21,8 @@
                 "e:\\Projects\\Cubemx_Projects\\watch\\BSP\\IIC",
                 "e:\\Projects\\Cubemx_Projects\\watch\\BSP\\AHT21",
                 "e:\\Projects\\Cubemx_Projects\\watch\\BSP\\KEY",
+                "e:\\Projects\\Cubemx_Projects\\watch\\BSP\\BL24C02",
+                "e:\\Projects\\Cubemx_Projects\\watch\\BSP\\KT6328",
                 "e:\\Projects\\Cubemx_Projects\\watch\\Middlewares\\Third_Party\\FreeRTOS\\Source",
                 "e:\\Projects\\Cubemx_Projects\\watch\\Middlewares\\Third_Party\\FreeRTOS\\Source\\portable\\MemMang",
                 "e:\\Projects\\Cubemx_Projects\\watch\\LVGL\\lvgl\\src\\porting",
@@ -72,6 +74,7 @@
             "defines": [
                 "USE_HAL_DRIVER",
                 "STM32F411xE",
+                "NDEBUG",
                 "__CC_ARM",
                 "__arm__",
                 "__align(x)=",
