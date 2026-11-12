@@ -35,7 +35,7 @@
 #include "../../BSP/KEY/key.h"
 #include "../../BSP/BL24C02/DataSave.h"
 #include "../../BSP/KT6328/KT6328.h"
-
+#include "../../BSP/SPL06_001/SPL06_001.h"
 #include "../../SYSTEM/delay.h"
 #include "../../LVGL/lvgl/lvgl.h"
 #include "../../LVGL/lvgl/src/porting/lv_port_disp.h"
@@ -116,6 +116,7 @@ int main(void)
 
     key_init();
   delay_init();
+  SPL_init();
   #if !SOFTWARE_SPI
     lcd_openLight();
     lcd_setLight(100);

@@ -25,7 +25,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "../../User/Tasks/Inc/user_TaskInit.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/

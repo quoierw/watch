@@ -7,24 +7,32 @@
 #include "../../../Middlewares/Third_Party/FreeRTOS/Source/include/task.h"
 #include "../../../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os.h"
 #include "../../BSP/AHT21/AHT21.h"
+#include "../../BSP/SPL06_001/SPL06_001.h"
 #include "string.h"
 #include "stdio.h"
 #include "../../BSP/KEY/key.h"
 void LvHandlerTask(void *argument);
 void AHT21HandlerTask(void *argument);
 void keyTask(void *argument);
-
+void SPL06HandlerTask(void *argument);
 
 osThreadId_t LvHandlerTaskHandle;
 const osThreadAttr_t LvHandlerTask_attributes = {
   .name = "LvHandler",
-  .stack_size = 128 * 30,
+  .stack_size = 128 * 50,
   .priority = (osPriority_t) osPriorityLow,
 };
 
-osThreadId_t AHT21HTaskHandle;
+osThreadId_t AHT21TaskHandle;
 const osThreadAttr_t AHT21Task_attributes = {
   .name = "AHT21Handler",
+  .stack_size = 128 * 10,
+  .priority = (osPriority_t) osPriorityLow1,
+};
+
+osThreadId_t SPL06TaskHandle;
+const osThreadAttr_t SPL06Task_attributes = {
+  .name = "SPL06Handler",
   .stack_size = 128 * 10,
   .priority = (osPriority_t) osPriorityLow1,
 };
@@ -37,12 +45,15 @@ const osThreadAttr_t keyTask_attributes = {
 };
 
 osMessageQueueId_t aht211QID;
+osMessageQueueId_t SPL06QID;
 
 void UserTaskInit(void)
 {
     aht211QID = osMessageQueueNew(1, 2 *sizeof(float), NULL);
+    SPL06QID = osMessageQueueNew(1, 2 *sizeof(float), NULL);
     LvHandlerTaskHandle = osThreadNew(LvHandlerTask, NULL, &LvHandlerTask_attributes);
-    AHT21HTaskHandle = osThreadNew(AHT21HandlerTask, NULL, &AHT21Task_attributes);
+    AHT21TaskHandle = osThreadNew(AHT21HandlerTask, NULL, &AHT21Task_attributes);
+    SPL06TaskHandle = osThreadNew(SPL06HandlerTask, NULL, &SPL06Task_attributes);
     keyHTaskHandle = osThreadNew(keyTask, NULL, &keyTask_attributes);
 }
 
@@ -50,7 +61,9 @@ void LvHandlerTask(void *argument)
 {
     uint8_t i = 0;
 	float HumiTemp[2] = {0};
+	float pressTemp[2] = {0};
     char str[30] = {0};
+    char str1[40] = {0};
 	uint32_t wait;
 	lv_init();
 	lv_port_disp_init();
@@ -70,11 +83,19 @@ void LvHandlerTask(void *argument)
     lv_obj_set_pos(slider, 50, 50);
 	
     lv_obj_t* label2 = lv_label_create(scr);
-    lv_obj_set_size(label2, 100, 50);
+    lv_obj_set_size(label2, 200, 100);
     lv_obj_set_pos(label2, 0, 200); 
-	
+    
+    lv_obj_t*  label3= lv_label_create(scr);
+    lv_obj_set_size(label3, 200, 100);
+    lv_obj_set_pos(label3, 0, 100); 
     while(1)
     {
+		if(osOK == osMessageQueueGet(SPL06QID, pressTemp, 0, 0))
+		{
+            sprintf(str1, "press:%.2f, temp:%.2f", pressTemp[0], pressTemp[1]);
+			lv_label_set_text(label3, str1);
+		}
 		if(osOK == osMessageQueueGet(aht211QID, HumiTemp, 0, 0))
 		{
             sprintf(str, "humi:%.2f, temp:%.2f", HumiTemp[0], HumiTemp[1]);
@@ -95,6 +116,18 @@ void AHT21HandlerTask(void *argument)
     {
         AHT21_Read(&HumiTemp[0], &HumiTemp[1]);
         osMessageQueuePut(aht211QID, HumiTemp,0,0);
+        osDelay(1000);
+    } 
+}
+
+void SPL06HandlerTask(void *argument)
+{
+    float PressTemp[2] = {0};
+    while(1)
+    {
+        PressTemp[0] = Pressure_Calculate();
+        PressTemp[1] = Temperature_Calculate();
+        osMessageQueuePut(SPL06QID, PressTemp,0,0);
         osDelay(1000);
     } 
 }
