@@ -19,6 +19,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "cmsis_os.h"
+#include "adc.h"
 #include "dma.h"
 #include "spi.h"
 #include "tim.h"
@@ -110,6 +111,7 @@ int main(void)
   MX_TIM3_Init();
   MX_SPI1_Init();
   MX_USART1_UART_Init();
+  MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
 	TIM1_CH3N_PWM_Init();
 	__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_3, 0);

@@ -8,6 +8,7 @@
 #include "../../../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os.h"
 #include "../../BSP/AHT21/AHT21.h"
 #include "../../BSP/SPL06_001/SPL06_001.h"
+#include "../../BSP/POWER/power.h"
 #include "string.h"
 #include "stdio.h"
 #include "../../BSP/KEY/key.h"
@@ -83,17 +84,17 @@ void LvHandlerTask(void *argument)
     lv_obj_set_pos(slider, 50, 50);
 	
     lv_obj_t* label2 = lv_label_create(scr);
-    lv_obj_set_size(label2, 200, 100);
+    lv_obj_set_size(label2, 170, 50);
     lv_obj_set_pos(label2, 0, 200); 
     
     lv_obj_t*  label3= lv_label_create(scr);
-    lv_obj_set_size(label3, 200, 100);
+    lv_obj_set_size(label3, 200, 50);
     lv_obj_set_pos(label3, 0, 100); 
     while(1)
     {
 		if(osOK == osMessageQueueGet(SPL06QID, pressTemp, 0, 0))
 		{
-            sprintf(str1, "press:%.2f, temp:%.2f", pressTemp[0], pressTemp[1]);
+            sprintf(str1, "press:%.2f, bat:%.2f", pressTemp[0], pressTemp[1]);
 			lv_label_set_text(label3, str1);
 		}
 		if(osOK == osMessageQueueGet(aht211QID, HumiTemp, 0, 0))
@@ -125,8 +126,8 @@ void SPL06HandlerTask(void *argument)
     float PressTemp[2] = {0};
     while(1)
     {
-        PressTemp[0] = Pressure_Calculate();
-        PressTemp[1] = Temperature_Calculate();
+        PressTemp[0] = ChargeCheck();
+        PressTemp[1] = BatCheck();
         osMessageQueuePut(SPL06QID, PressTemp,0,0);
         osDelay(1000);
     } 
