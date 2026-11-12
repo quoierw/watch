@@ -2034,6 +2034,11 @@
               <FileType>1</FileType>
               <FilePath>..\BSP\POWER\power.c</FilePath>
             </File>
+            <File>
+              <FileName>WDOG.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\BSP\OWDG\WDOG.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
